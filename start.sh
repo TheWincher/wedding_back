@@ -7,7 +7,7 @@ echo "PORT=$PORT"
 echo "Testing DB connection..."
 pg_isready -d "$DATABASE_URL" || echo "⚠️ DB not ready"
 ls -la /app
-file ./app/wedding_list_backend
+file ./wedding_list_backend
 echo "=== STARTING BACKEND ==="
-./app/wedding_list_backend
+./wedding_list_backend
 
