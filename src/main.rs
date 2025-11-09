@@ -43,6 +43,7 @@ struct UpdateInviteDto {
 async fn main() {
     dotenv().ok();
     let config = Config::from_env();
+    println!("⚙️ Config loaded");
 
     let cors_layer = CorsLayer::new()
         .allow_origin(config.frontend_url.parse::<HeaderValue>().unwrap())
@@ -64,6 +65,7 @@ async fn main() {
             }
         }
     };
+    println!("⚙️ Pool db connected");
 
     let state = AppState {
         pool: Arc::new(pool),
@@ -75,6 +77,8 @@ async fn main() {
         .route("/invites/all/:code", get(get_all_invites))
         .layer(cors_layer)
         .with_state(state);
+
+    println!("⚙️ Router initialized");
 
     let port = env::var("PORT").unwrap_or_else(|_| "3000".to_string());
     let addr = format!("0.0.0.0:{}", port);
