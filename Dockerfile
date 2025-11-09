@@ -33,24 +33,14 @@ WORKDIR /app
 
 # Copier le binaire compilé depuis l’étape de build
 COPY --from=builder /app/target/release/wedding_list_backend .
+COPY start.sh ./start.sh
 
 # Donner les droits au nouvel utilisateur
 RUN chown appuser:appuser /app/wedding_list_backend
+RUN chmod +x ./start.sh
 
 # Passer à l’utilisateur non-root
 USER appuser
-
-# Créer un script de démarrage (lisible et robuste)
-RUN cat <<'EOF' > start.sh
-#!/bin/sh
-echo "=== DEBUG ==="
-echo "DATABASE_URL=$DATABASE_URL"
-ls -la /app
-echo "=== STARTING BACKEND ==="
-./weeding_list_backend
-EOF
-
-RUN chmod +x start.sh
 
 # Exposer le port utilisé par ton backend (ajuste selon ton code)
 EXPOSE 3000
