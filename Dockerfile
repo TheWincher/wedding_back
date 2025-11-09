@@ -39,13 +39,14 @@ COPY start.sh ./start.sh
 
 # Donner les droits au nouvel utilisateur
 RUN chown appuser:appuser /app/wedding_list_backend
+RUN chmod +x /app/wedding_list_backend
 RUN chmod +x ./start.sh
 
 # Passer à l’utilisateur non-root
 USER appuser
 
 # Exposer le port utilisé par ton backend (ajuste selon ton code)
-EXPOSE 3000
+EXPOSE 10000
 
 # Lancer l’application
 # CMD ["./wedding_list_backend"]
