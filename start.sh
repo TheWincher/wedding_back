@@ -9,5 +9,5 @@ pg_isready -d "$DATABASE_URL" || echo "⚠️ DB not ready"
 
 ls -la /app
 echo "=== STARTING BACKEND ==="
-./wedding_list_backend 2>&1 | tee backend.log
+./wedding_list_backend
 

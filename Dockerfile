@@ -24,6 +24,8 @@ FROM debian:bullseye-slim
 
 # Installer les librairies nécessaires à l'exécution du binaire Rust (openssl, etc.)
 RUN apt-get update && apt-get install -y libssl-dev ca-certificates && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y postgresql-client
+
 
 # Créer un utilisateur non-root pour la sécurité
 RUN useradd -m appuser
