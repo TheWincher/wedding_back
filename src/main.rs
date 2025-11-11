@@ -9,6 +9,7 @@ use axum::{
 use dotenvy::dotenv;
 use serde::{Deserialize, Serialize};
 use sqlx::{PgPool, Pool, Postgres, prelude::FromRow};
+use tokio::time::{Duration, sleep};
 use tower_http::cors::{Any, CorsLayer};
 
 use crate::config::Config;
@@ -92,6 +93,8 @@ async fn main() {
         config: Arc::new(config),
     };
 
+    keep_db_awake(state.pool.clone()).await;
+
     let app = Router::new()
         .route("/", get(|| async { "✅ API online" }))
         .route("/invites/:code", get(get_invites).patch(update_invites))
@@ -162,4 +165,18 @@ async fn update_invites(
             return (StatusCode::INTERNAL_SERVER_ERROR, Err(Json(e.to_string())));
         }
     }
+}
+
+async fn keep_db_awake(pool: Arc<Pool<Postgres>>) {
+    tokio::spawn(async move {
+        loop {
+            // Exécute une requête simple toutes les 5 minutes
+            let result = sqlx::query("SELECT 1").execute(&*pool).await;
+            match result {
+                Ok(_) => println!("✅ Database ping successful"),
+                Err(e) => eprintln!("⚠️ Database ping failed: {}", e),
+            }
+            sleep(Duration::from_secs(120)).await; // toutes les 5 minutes
+        }
+    });
 }
