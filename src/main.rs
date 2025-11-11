@@ -93,6 +93,7 @@ async fn main() {
     };
 
     let app = Router::new()
+        .route("/", get(|| async { "✅ API online" }))
         .route("/invites/:code", get(get_invites).patch(update_invites))
         .route("/invites/all/:code", get(get_all_invites))
         .layer(cors_layer)
